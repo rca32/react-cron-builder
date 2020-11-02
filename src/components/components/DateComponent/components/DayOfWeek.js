@@ -3,25 +3,25 @@
 import {PureComponent} from 'react'
 
 const weekDaysOptions = [
-    'Mondays', 'Tuesdays', 'Wednesdays',
-    'Thursdays', 'Fridays', 'Saturdays',
-    'Sundays'
+    '월', '화', '수',
+    '목', '금', '토',
+    '일'
 ].map((day: string, i: number) => ({
     label: day,
     value: String(i + 1)
 }));
-
+ 
 const options = [
     {
-        label: 'every day',
+        label: '매일',
         value: '*'
     },
     {
-        label: 'Mondays to Fridays',
+        label: '월요일 부터 금요일',
         value: '1-5'
     },
     {
-        label: 'Saturdays and Sundays',
+        label: '토요일과 일요일',
         value: '6-7'
     }
 ].concat(weekDaysOptions);

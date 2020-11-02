@@ -7,8 +7,8 @@ import {isMultiple, ensureMultiple, replaceEvery} from 'utils'
 import type {PresetTabState} from './types/PresetTabState'
 import type {PresetTabProps} from './types/PresetTabProps'
 
-export const ensureEveryOn = (value: string[] | string, multiple: boolean) => {
-    const process = (item: string) => {
+export const ensureEveryOn = (value: any, multiple: boolean) => {
+    const process = (item: any) => {
         if(item === EVERY) {
             return item
         }
@@ -30,23 +30,6 @@ export const ensureEveryOn = (value: string[] | string, multiple: boolean) => {
     }
 };
 
-export function ensureValue(value: string | string[]) {
-    if (Array.isArray(value) && !value.length) {
-        return [EVERY]
-    }
-    if (!value) {
-        return EVERY
-    }
-    return value
-}
-
-export function ensureArrayValue(value: string[]): string[] {
-    if (value.length) {
-        return value
-    }
-    return [EVERY]
-}
-
 export default class PresetTab extends PureComponent {
     constructor(props: PresetTabProps, ctx: Object) {
         super(props, ctx);
@@ -63,38 +46,41 @@ export default class PresetTab extends PureComponent {
             hours
         };
     }
-
+    componentWillReceiveProps(nextProps: PresetTabProps) {
+    // this.props 는 아직 바뀌지 않은 상태
+        this.setState(nextProps.expression);
+    }
     props: PresetTabProps;
 
     state: PresetTabState;
 
     selectMinutes = (value: string) => {
         this.setState({
-            minutes: ensureValue(value)
+            minutes: value
         })
     };
 
     selectHours = (value: string) => {
         this.setState({
-            hours: ensureValue(value)
+            hours: value
         })
     };
 
     selectDayOfWeek = (value: string) => {
         this.setState({
-            dayOfWeek: ensureArrayValue(value)
+            dayOfWeek: value
         })
     };
 
     selectDayOfMonth = (value: string) => {
         this.setState({
-            dayOfMonth: ensureArrayValue(value)
+            dayOfMonth: value
         })
     };
 
     selectMonth = (value: string) => {
         this.setState({
-            month: ensureArrayValue(value)
+            month: value
         })
     };
 

@@ -15,6 +15,6 @@ storiesOf('CronBuilder', module)
         onChange={action('got expression')}
     />)
     .add('with predefined expression time frame', () => <CronBuilder
-        cronExpression="30 9-18 * * 1-5"
+        cronExpression="*/30 */1 10-18 * * 1-5"
         onChange={action('got expression')}
     />);

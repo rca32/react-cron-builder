@@ -3,26 +3,30 @@
 import React from 'react'
 import range from 'lodash/range'
 import {toOptions, defaultTo, ensureMultiple} from 'utils'
-import type {Option} from 'types/Option'
+import type {Option} from 'types/Option' 
 import PresetTab from './PresetTab'
 import MultipleSwitcher from './MultipleSwitcher'
 import TimeInput from './components/TimeInput'
 import DateComponent, {DayOfWeek, DayOfMonth, Month} from './components/DateComponent'
 import type {PresetTabProps} from './types/PresetTabProps'
 
-const minutesOptions = toOptions(range(1, 60)).map((option: Option) => {
+const minutesOptions = toOptions(range(0, 60)).map((option: Option) => {
     const {label, value} = option;
-    if(label === '1') {
+
+    if(value==0)
+    {
         return {
-            label: `${label} min`,
-            value
-        }
-    } else {
-        return {
-            label: `${label} mins`,
-            value
+                label: `30초`,
+                value
         }
     }
+    else{
+        return {
+                label: `${label} 분`,
+                value
+        }
+    }
+
 });
 
 const hoursOptions = toOptions(range(0, 24)).map((option: Option) => {
@@ -86,6 +90,15 @@ export default class PeriodicallyFrameTab extends PresetTab {
         }
     };
 
+    
+    componentDidUpdate()
+    {
+        try {
+            this.props.onChange();
+        } catch (error) {
+            
+        }
+    }
     render() {
         const {styleNameFactory} = this.props;
         const {minutes, hoursFrom, hoursTo, dayOfWeek, dayOfMonth, month} = this.state;
@@ -94,14 +107,10 @@ export default class PeriodicallyFrameTab extends PresetTab {
                 {...styleNameFactory('preset')}
             >
                 <div>
-                    <MultipleSwitcher
-                        styleNameFactory={styleNameFactory}
-                        isMultiple={this.isMinutesMultiple()}
-                        onChange={this.changeDateType}
-                    />
-                    <div
-                        {...styleNameFactory('row', 'main')}
-                    >
+
+                    <div {...styleNameFactory('label')}>
+                    반복 (분/초):
+                    </div>
                         <TimeInput
                             options={minutesOptions}
                             onChange={this.selectMinutes}
@@ -110,7 +119,7 @@ export default class PeriodicallyFrameTab extends PresetTab {
                             multi={this.isMinutesMultiple()}
                             {...timeInputProps}
                         />
-                    </div>
+        
                 </div>
                 <div
                     {...styleNameFactory('row', 'hours-range')}
@@ -119,7 +128,7 @@ export default class PeriodicallyFrameTab extends PresetTab {
                         <div
                             {...styleNameFactory('label')}
                         >
-                            Starting at:
+                            시작 시간:
                         </div>
                         <TimeInput
                             styleNameFactory={styleNameFactory}
@@ -133,7 +142,7 @@ export default class PeriodicallyFrameTab extends PresetTab {
                         <div
                             {...styleNameFactory('label')}
                         >
-                            Ending at:
+                            종료 시간:
                         </div>
                         <TimeInput
                             styleNameFactory={styleNameFactory}
@@ -151,14 +160,7 @@ export default class PeriodicallyFrameTab extends PresetTab {
                         value={dayOfWeek}
                         onChange={this.selectDayOfWeek}
                     />
-                    <DayOfMonth
-                        value={dayOfMonth}
-                        onChange={this.selectDayOfMonth}
-                    />
-                    <Month
-                        value={month}
-                        onChange={this.selectMonth}
-                    />
+
                 </DateComponent>
             </div>
         )

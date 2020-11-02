@@ -22,7 +22,6 @@ export default class Tab extends PureComponent {
         const {isActive, children, styleNameFactory, onClick} = this.props;
         return (
             <button
-                type="button"
                 {...styleNameFactory('tab', {active: isActive})}
                 onClick={onClick}
             >

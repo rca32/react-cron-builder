@@ -32,6 +32,8 @@ export const parseTimeValue = (value: any) => {
         return value.map(parseTimeValue)
     }
     switch (value) {
+        case '*/0':
+            return '0';
         case '*':
             return '1';
         default:
@@ -58,6 +60,10 @@ export const getValue = (value: any) => {
 };
 
 export const generateCronExpression = (expression: CronExpression) => {
+    if(expression["minutes"]==="*/0")
+    {
+        expression["minutes"] = "*/30 */1";
+    }
     return values(expression).join(' ')
 };
 
@@ -85,21 +91,43 @@ export const replaceEvery = (value: any) => {
 };
 
 export const parseCronExpression = (expression: string) => {
-    const [minutes, hours, dayOfMonth, month, dayOfWeek] = expression.split(' ');
-    const defaultExpression = {
-        minutes: EVERY,
-        hours: EVERY,
-        dayOfMonth: EVERY,
-        month: EVERY,
-        dayOfWeek: EVERY
-    };
-    return Object.assign(defaultExpression, {
-        minutes: replaceEvery(splitMultiple(minutes)),
-        hours: replaceEvery(splitMultiple(hours, HOURS)),
-        dayOfMonth: splitMultiple(dayOfMonth),
-        month: splitMultiple(month),
-        dayOfWeek: splitMultiple(dayOfWeek)
-    })
+    const segments = expression.split(' ');
+    if(segments.length==5)
+    {
+        const [minutes, hours, dayOfMonth, month, dayOfWeek] = segments;
+        const defaultExpression = {
+            minutes: EVERY,
+            hours: EVERY,
+            dayOfMonth: EVERY,
+            month: EVERY,
+            dayOfWeek: EVERY
+        };
+        return Object.assign(defaultExpression, {
+            minutes: replaceEvery(splitMultiple(minutes)),
+            hours: replaceEvery(splitMultiple(hours, HOURS)),
+            dayOfMonth: splitMultiple(dayOfMonth),
+            month: splitMultiple(month),
+            dayOfWeek: splitMultiple(dayOfWeek)
+        })  
+    }
+    else if(segments.length==6)
+    {
+        const [seconds,minutes, hours, dayOfMonth, month, dayOfWeek] = segments;
+        const defaultExpression = {
+            minutes: EVERY,
+            hours: EVERY,
+            dayOfMonth: EVERY,
+            month: EVERY,
+            dayOfWeek: EVERY
+        };
+        return Object.assign(defaultExpression, {
+            minutes: "*/0",
+            hours: replaceEvery(splitMultiple(hours, HOURS)),
+            dayOfMonth: splitMultiple(dayOfMonth),
+            month: splitMultiple(month),
+            dayOfWeek: splitMultiple(dayOfWeek)
+        })  
+    }
 };
 
 export const addLeadingZero = (el: any) => `0${el}`.slice(-2);

@@ -60,41 +60,29 @@ export default class DateComponent extends PureComponent {
                 style={{position: 'relative'}}
             >
                 <label {...styleNameFactory('label')} >
-                    On:
+                    일자:
                 </label>
                 <div {...styleNameFactory('row', 'items-end')} >
                     {Children.map(children, (child: React.Children) => {
                         const {value, onChange} = child.props;
                         const {getOptions} = child.type;
                         return (
-                            <If condition={child.type.className === activeComponent} >
-                                <Then>
-                                    <div
-                                        {...styleNameFactory('input')}
-                                    >
-                                        <Select
-                                            style={{minWidth: 120}}
-                                            value={value}
-                                            options={getOptions()}
-                                            multi
-                                            autosize
-                                            onChange={this.onChange(onChange)}
-                                        />
-                                    </div>
-                                </Then>
-                            </If>
+                
+                                <div
+                                    {...styleNameFactory('input')}
+                                >
+                                    <Select
+                                        style={{minWidth: 120}}
+                                        value={value}
+                                        options={getOptions()}
+                                        multi
+                                        autosize
+                                        onChange={this.onChange(onChange)}
+                                    />
+                                </div>
+               
                         )
                     })}
-                </div>
-                <div
-                    style={{position: 'absolute'}}
-                    {...styleNameFactory('link')}
-                >
-                    <select onChange={this.setActiveComponent} >
-                        <option value={DayOfWeek.className}>day of week</option>
-                        <option value={DayOfMonth.className}>day of month</option>
-                        <option value={Month.className}>month</option>
-                    </select>
                 </div>
             </div>
         )

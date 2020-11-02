@@ -25,7 +25,7 @@ export default class PeriodicallyTab extends PresetTab {
         const {hours} = this.state;
         this.state.hours = rangeHoursToSingle(hours)
     }
-
+ 
 
     toggleActiveTime = () => {
         this.setState(({activeTime}: PresetTabState) => ({
